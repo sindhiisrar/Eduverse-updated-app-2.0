@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduverse - Your Educational Companion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary: #4a6cfa;
+            --secondary: #6c63ff;
+            --accent: #36d6b0;
+            --dark: #2a2a3c;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --transition: all 0.3s ease;
+            --border-radius: 16px;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7ff;
+            overflow-x: hidden;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--secondary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .section {
+            padding: 2rem 0;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            font-size: 1.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+            color: white;
+        }
+
+        /* App Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .app-header i {
+            font-size: 1.3rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.7rem 0;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 0.8rem;
+            transition: var(--transition);
+            padding: 0.3rem 0.8rem;
+            border-radius: var(--border-radius);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(74, 108, 250, 0.1);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Home Section */
+        .home-section {
+            padding: 1.5rem 0;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .welcome-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .welcome-card h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(74, 108, 250, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.8rem;
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        /* Notes Sections */
+        .notes-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .notes-iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+            border-radius: var(--border-radius);
+            background: #f8f9fa;
+        }
+
+        /* YouTube Section */
+        .youtube-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .youtube-iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+            border-radius: var(--border-radius);
+        }
+
+        /* Website Section */
+        .website-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .website-iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+            border-radius: var(--border-radius);
+            background: #f8f9fa;
+        }
+
+        /* Profile Section */
+        .profile-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .profile-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .skill-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(74, 108, 250, 0.1);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
+
+        /* Social Links */
+        .social-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+        }
+
+        .social-title {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .app-footer {
+            background: var(--dark);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            color: var(--accent);
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .welcome-card {
+                padding: 1.2rem;
+            }
+            
+            .nav-item {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.5rem;
+            }
+            
+            .nav-item i {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="container">
+            <h1><i class="fas fa-graduation-cap"></i> Eduverse</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="container home-section">
+                <div class="welcome-card">
+                    <div class="welcome-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h2>Welcome to Eduverse</h2>
+                    <p>Your all-in-one educational companion designed to help you excel in your studies and beyond.</p>
+                    <p>Access academic resources, general knowledge, video content, and more - all in one place!</p>
+                </div>
+
+                <h2 class="section-title">Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>Academic Notes</h3>
+                        <p>Access subject-wise study materials</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <h3>General Notes</h3>
+                        <p>Personal knowledge repository</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <h3>Video Content</h3>
+                        <p>Educational videos and tutorials</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <h3>Blog & Articles</h3>
+                        <p>Read educational content</p>
+                    </div>
+                </div>
+
+                <div class="social-section">
+                    <h2 class="social-title">Follow Us</h2>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p>Stay updated with the latest educational content</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic Notes Section -->
+        <section id="academic-notes" class="section">
+            <div class="container">
+                <h2 class="section-title">Academic Notes</h2>
+                <div class="notes-container">
+                    <iframe src="https://notes.com/academic" class="notes-iframe" title="Academic Notes"></iframe>
+                </div>
+                <p class="text-center">Browse and search through our collection of academic notes and study materials.</p>
+            </div>
+        </section>
+
+        <!-- General Notes Section -->
+        <section id="general-notes" class="section">
+            <div class="container">
+                <h2 class="section-title">General Notes</h2>
+                <div class="notes-container">
+                    <iframe src="https://notes.com/general" class="notes-iframe" title="General Notes"></iframe>
+                </div>
+                <p class="text-center">Explore personal knowledge repository and general notes on various topics.</p>
+            </div>
+        </section>
+
+        <!-- YouTube Section -->
+        <section id="youtube" class="section">
+            <div class="container">
+                <h2 class="section-title">Educational Videos</h2>
+                <div class="youtube-container">
+                    <iframe src="https://widget.tagembed.com/297587?website=1" class="youtube-iframe" title="YouTube Content"></iframe>
+                </div>
+                <p class="text-center">Watch educational videos and tutorials to enhance your learning experience.</p>
+            </div>
+        </section>
+
+        <!-- Website Section -->
+        <section id="website" class="section">
+            <div class="container">
+                <h2 class="section-title">Educational Blog</h2>
+                <div class="website-container">
+                    <iframe src="https://eduverse-education.blogspot.com" class="website-iframe" title="Educational Blog"></iframe>
+                </div>
+                <p class="text-center">Read our latest blog posts and educational articles.</p>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="container">
+                <h2 class="section-title">Developer Profile</h2>
+                <div class="profile-card">
+                    <div class="profile-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>Israr Ali</h3>
+                    <p>Student & Developer</p>
+                    <p>Passionate about creating educational technology that makes learning accessible to everyone.</p>
+                    
+                    <div class="profile-skills">
+                        <span class="skill-tag">HTML/CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Web Development</span>
+                        <span class="skill-tag">UI/UX Design</span>
+                    </div>
+                    
+                    <a href="https://script.google.com/macros/s/AKfycbwFTFJfqUbIaAA5uCw2K1Qljay5-WwxviJDODDMIfq6gDbe_xbK2NJVr4sOe7P06f8jeg/exec" class="btn btn-primary">View Portfolio</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" data-target="home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" data-target="academic-notes">
+            <i class="fas fa-book"></i>
+            <span>Academic</span>
+        </div>
+        <div class="nav-item" data-target="general-notes">
+            <i class="fas fa-sticky-note"></i>
+            <span>General</span>
+        </div>
+        <div class="nav-item" data-target="youtube">
+            <i class="fab fa-youtube"></i>
+            <span>Videos</span>
+        </div>
+        <div class="nav-item" data-target="website">
+            <i class="fas fa-blog"></i>
+            <span>Blog</span>
+        </div>
+        <div class="nav-item" data-target="profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container footer-content">
+            <div class="footer-logo">Edu<span>verse</span></div>
+            <p class="copyright">© 2025-26 Eduverse Educational App. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.section');
+            
+            // Function to switch sections
+            function switchSection(sectionId) {
+                // Hide all sections
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show the selected section
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Update active nav item
+                navItems.forEach(item => {
+                    if (item.getAttribute('data-target') === sectionId) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Add click event to nav items
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetSection = this.getAttribute('data-target');
+                    switchSection(targetSection);
+                });
+            });
+            
+            // Initialize the first section as active
+            switchSection('home');
+        });
+    </script>
+</body>
+</html>
